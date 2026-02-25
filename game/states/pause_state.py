@@ -5,8 +5,8 @@ class PauseState(BaseState):
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                from game.states import PlayingState
-                self.game.state_machine.change(PlayingState(self.game))
+                # from game.states import PlayingState
+                self.game.state_machine.pop()
 
     def draw(self, screen):
         screen.fill((100, 100, 100))

@@ -1,36 +1,34 @@
 class StateMachine:
     def __init__(self):
-        self.current_state = None
-
-    # ------------------------------------------
-    # Change State
-    # ------------------------------------------
+        self.states = []
+    
     def change(self, new_state):
-        if self.current_state is not None:
-            self.current_state.exit()
+        if new_state is None:
+            print("Error: Trying to move to a None state")
+            return 
+        self.pop()
+        self.push(new_state)
 
-        self.current_state = new_state
-
-        if self.current_state is not None:
-            self.current_state.enter()
-
-    # ------------------------------------------
-    # Event Handling
-    # ------------------------------------------
+    def push(self, new_state):
+        if new_state is None:
+            return 
+        
+        self.states.append(new_state)
+        self.states[-1].enter()
+        
+    def pop(self):
+        if len(self.states) > 0:
+            self.states[-1].exit()
+            self.states.pop()
+        
     def handle_event(self, event):
-        if self.current_state is not None:
-            self.current_state.handle_event(event)
+        if len(self.states) > 0:
+            self.states[-1].handle_event(event)
 
-    # ------------------------------------------
-    # Update
-    # ------------------------------------------
     def update(self, dt):
-        if self.current_state is not None:
-            self.current_state.update(dt)
+        if len(self.states) > 0:
+            self.states[-1].update(dt)
 
-    # ------------------------------------------
-    # Draw
-    # ------------------------------------------
     def draw(self, screen):
-        if self.current_state is not None:
-            self.current_state.draw(screen)
+        for state in self.states:
+            state.draw(screen)

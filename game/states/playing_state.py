@@ -24,7 +24,7 @@ class PlayingState(BaseState):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 from game.states import PauseState
-                self.game.state_machine.change(PauseState(self.game))
+                self.game.state_machine.push(PauseState(self.game))
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Left click
