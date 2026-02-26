@@ -10,9 +10,7 @@ class PauseState(BaseState):
 
     def draw(self, screen):
         screen.fill((100, 100, 100))
-
-        font = pygame.font.SysFont(None, 50)
-        text = font.render("PAUSED - Press ENTER", True, (0, 0, 0))
+        text = self.font.render("PAUSED - Press ENTER", True, (0, 0, 0))
 
         rect = text.get_rect(center=(
             self.game.width // 2,
