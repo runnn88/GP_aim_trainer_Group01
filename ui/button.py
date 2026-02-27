@@ -17,7 +17,7 @@ class Button():
         self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
         self.is_hovering = False 
         self.glow_text = self.font.render(self.text_input, True, self.hovering_color)
-        self.glow_text.set_alpha(80)
+        # self.glow_text.set_alpha(0)
         self.glow_offset =  [(-4, -4), (4, -4), (-4, 4), (4, 4), 
                             (-4, 0),  (4, 0),  (0, -4), (0, 4)] 
     

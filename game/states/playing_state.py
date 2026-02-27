@@ -80,7 +80,7 @@ class PlayingState(BaseState):
 
     # ------------------------------------------
     def draw(self, screen):
-        screen.fill((20, 120, 20))
+        screen.fill((255, 245, 191))
 
         # Draw target
         self.target.draw(screen)

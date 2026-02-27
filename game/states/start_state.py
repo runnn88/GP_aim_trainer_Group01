@@ -14,12 +14,12 @@ class StartState(BaseState):
         
         self.start_button = Button(image=None, pos=(center_x, center_y + 70), 
                                    font=self.font, base_color="white",
-                                   hovering_color= (255,200,200), #rgb(255,200,200)
+                                   hovering_color= (237,152,152), #rgb(237,152,152)
                                    text_input="Start"            
         )
         self.exit_button = Button(image=None, pos=(center_x, center_y + 200), 
                                    font=self.font, base_color="white",
-                                   hovering_color= (255,200,200), #rgb(255,200,200)
+                                   hovering_color= (237,152,152), #rgb(237,152,152)
                                    text_input="Exit"            
         )
     def handle_event(self, event):
