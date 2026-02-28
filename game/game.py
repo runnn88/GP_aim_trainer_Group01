@@ -1,4 +1,6 @@
 import pygame
+import json
+from pathlib import Path
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FULLSCREEN, TITLE
 from game.state_machine import StateMachine
 from game.states import StartState
@@ -30,6 +32,8 @@ class Game:
             "ttl_multiplier": 1.0,
             "target_color": (129, 2, 31),
         }
+        self.stats_file = Path(__file__).resolve().parent.parent / "player_stats.json"
+        self.persistent_stats = self._load_persistent_stats()
 
         # --- State Machine ---
         self.state_machine = StateMachine()
@@ -99,3 +103,36 @@ class Game:
     # --------------------------------------------------
     def quit(self):
         pygame.quit()
+
+    def _load_persistent_stats(self):
+        default_stats = {"best_score": 0, "highest_combo": 0}
+        if not self.stats_file.exists():
+            return default_stats
+
+        try:
+            data = json.loads(self.stats_file.read_text(encoding="utf-8"))
+            return {
+                "best_score": max(0, int(data.get("best_score", 0))),
+                "highest_combo": max(0, int(data.get("highest_combo", 0))),
+            }
+        except Exception:
+            return default_stats
+
+    def _save_persistent_stats(self):
+        self.stats_file.write_text(
+            json.dumps(self.persistent_stats, indent=2), encoding="utf-8"
+        )
+
+    def update_persistent_stats(self, score, highest_combo):
+        updated = False
+
+        if score > self.persistent_stats["best_score"]:
+            self.persistent_stats["best_score"] = score
+            updated = True
+
+        if highest_combo > self.persistent_stats["highest_combo"]:
+            self.persistent_stats["highest_combo"] = highest_combo
+            updated = True
+
+        if updated:
+            self._save_persistent_stats()
