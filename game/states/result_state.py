@@ -95,7 +95,7 @@ class ResultState(BaseState):
 
         # Instructions
         restart_text = self.font_small.render(
-            "Press ENTER to Restart | ESC to Quit",
+            "Press ENTER to Main Menu | ESC to Quit",
             True,
             (245,238,205)
         )

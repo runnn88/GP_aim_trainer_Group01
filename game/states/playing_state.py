@@ -5,7 +5,7 @@ from ui.hud import HUD
 
 class PlayingState(BaseState):
     def enter(self):
-        self.duration = 60
+        self.duration = self.game.settings["duration"]
         self.time_left = self.duration
 
         self.font = pygame.font.SysFont(None, 36)
@@ -14,10 +14,14 @@ class PlayingState(BaseState):
         self.hits = 0
         self.misses = 0
         self.score = 0
+        self.combo = 0
         self.reaction_times = []
 
         # Target
-        self.target = Target(self.game, radius=30, ttl=1.5)
+        radius = int(30 * self.game.settings["size_multiplier"])
+        ttl = 1.5 * self.game.settings["ttl_multiplier"]
+        target_color = self.game.settings["target_color"]
+        self.target = Target(self.game, radius=radius, ttl=ttl, color=target_color)
         self.spawn_time = pygame.time.get_ticks() / 1000.0
         self.hud = HUD(self.game)
 
@@ -46,6 +50,7 @@ class PlayingState(BaseState):
 
             results_data = {
                 "score": self.score,
+                "combo": self.combo,
                 "hits": self.hits,
                 "misses": self.misses,
                 "reaction_times": self.reaction_times
@@ -68,6 +73,7 @@ class PlayingState(BaseState):
         reaction = current_time - self.spawn_time
 
         self.hits += 1
+        self.combo += 1
         self.reaction_times.append(reaction)
 
         # Score formula (simple version from spec)
@@ -84,6 +90,7 @@ class PlayingState(BaseState):
     # ------------------------------------------
     def register_miss(self):
         self.misses += 1
+        self.combo = 0
         self.target.spawn()
         self.spawn_time = pygame.time.get_ticks() / 1000.0
 
@@ -95,4 +102,4 @@ class PlayingState(BaseState):
         self.target.draw(screen)
 
         # HUD
-        self.hud.draw(screen, self.time_left, self.score, self.hits, self.misses)
+        self.hud.draw(screen, self.time_left, self.score, self.hits, self.misses, self.combo)

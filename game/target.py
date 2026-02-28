@@ -4,10 +4,11 @@ import math
 
 
 class Target:
-    def __init__(self, game, radius=30, ttl=1.5):
+    def __init__(self, game, radius=30, ttl=1.5, color=(129, 2, 31)):
         self.game = game
         self.radius = radius
         self.ttl = ttl  # seconds
+        self.color = color
         
         self.x = 0
         self.y = 0
@@ -54,7 +55,7 @@ class Target:
     def draw(self, screen):
         pygame.draw.circle(
             screen,
-            (129,2,31),  # rgb(129,2,31)
+            self.color,
             (self.x, self.y),
             self.radius
         )

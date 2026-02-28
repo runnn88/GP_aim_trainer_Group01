@@ -24,6 +24,12 @@ class Game:
 
         self.clock = pygame.time.Clock()        
         self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 50)
+        self.settings = {
+            "duration": 60,
+            "size_multiplier": 1.0,
+            "ttl_multiplier": 1.0,
+            "target_color": (129, 2, 31),
+        }
 
         # --- State Machine ---
         self.state_machine = StateMachine()
