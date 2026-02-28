@@ -8,7 +8,7 @@ class Target:
         self.game = game
         self.radius = radius
         self.ttl = ttl  # seconds
-
+        
         self.x = 0
         self.y = 0
 
@@ -24,7 +24,7 @@ class Target:
         height = self.game.height
 
         self.x = random.randint(self.radius, width - self.radius)
-        self.y = random.randint(self.radius, height - self.radius)
+        self.y = random.randint(80 + self.radius, height - self.radius)
 
         self.time_alive = 0
 
