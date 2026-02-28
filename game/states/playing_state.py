@@ -29,9 +29,13 @@ class PlayingState(BaseState):
                 self.game.state_machine.push(PauseState(self.game))
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Left click
+            if event.button == 1:  
                 if self.target.is_hit(event.pos):
                     self.register_hit()
+                mouse_pos = pygame.mouse.get_pos()
+                if self.hud.pause.checkForInput(mouse_pos): 
+                    from game.states import PauseState
+                    self.game.state_machine.push(PauseState(self.game))
 
     # ------------------------------------------
     def update(self, dt):
@@ -54,6 +58,9 @@ class PlayingState(BaseState):
 
         if self.target.is_expired():
             self.register_miss()
+        
+        mouse_pos = pygame.mouse.get_pos()
+        self.hud.pause.changeColor(mouse_pos)
 
     # ------------------------------------------
     def register_hit(self):
