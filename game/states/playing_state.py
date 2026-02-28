@@ -1,6 +1,7 @@
 import pygame
 from .base_state import BaseState 
 from game.target import Target
+from ui.hud import HUD
 
 class PlayingState(BaseState):
     def enter(self):
@@ -18,6 +19,7 @@ class PlayingState(BaseState):
         # Target
         self.target = Target(self.game, radius=30, ttl=1.5)
         self.spawn_time = pygame.time.get_ticks() / 1000.0
+        self.hud = HUD(self.game)
 
     # ------------------------------------------
     def handle_event(self, event):
@@ -80,18 +82,10 @@ class PlayingState(BaseState):
 
     # ------------------------------------------
     def draw(self, screen):
-        screen.fill((255, 245, 191))
+        screen.fill((245,238,205))
 
         # Draw target
         self.target.draw(screen)
 
         # HUD
-        time_text = f"Time: {max(0, self.time_left):.1f}s"
-        score_text = f"Score: {self.score}"
-        hits_text = f"Hits: {self.hits}"
-        miss_text = f"Misses: {self.misses}"
-
-        screen.blit(self.font.render(time_text, True, (255, 255, 255)), (20, 20))
-        screen.blit(self.font.render(score_text, True, (255, 255, 255)), (20, 60))
-        screen.blit(self.font.render(hits_text, True, (255, 255, 255)), (20, 100))
-        screen.blit(self.font.render(miss_text, True, (255, 255, 255)), (20, 140))
+        self.hud.draw(screen, self.time_left, self.score, self.hits, self.misses)

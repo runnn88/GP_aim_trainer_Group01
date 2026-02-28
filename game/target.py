@@ -54,7 +54,7 @@ class Target:
     def draw(self, screen):
         pygame.draw.circle(
             screen,
-            (200, 50, 50),
+            (129,2,31),  # rgb(129,2,31)
             (self.x, self.y),
             self.radius
         )

@@ -7,7 +7,7 @@ from game.target import Target
 class BaseState:
     def __init__(self, game):
         self.game = game  # Reference to main Game object        
-        self.font = pygame.font.Font('PressStart2P.ttf', 50)
+        self.font = game.font
 
     def enter(self):
         """Called when state becomes active."""

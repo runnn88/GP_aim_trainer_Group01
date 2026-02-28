@@ -12,13 +12,13 @@ class PauseState(BaseState):
         self.title_rect = self.title_text.get_rect(center=(center_x, center_y - 200))
         
         self.cont_button = Button(image=None, pos=(center_x, center_y),
-                                  font=self.font, base_color=(133,4,34), #rgb(133,4,34)
-                                  hovering_color=(231,205,211), #rgb(231,205,211)
+                                  font=self.font, base_color=(129,2,31), #rgb(129,2,31)
+                                  hovering_color=(245,238,205), #rgb(245,238,205)
                                   text_input="Continue"
                                   ) 
         self.menu_button = Button(image=None, pos=(center_x, center_y + 100),
-                                  font=self.font, base_color=(133,4,34), 
-                                  hovering_color=(231,205,211), #rgb(231,205,211)
+                                  font=self.font, base_color=(129,2,31), 
+                                  hovering_color=(245,238,205), #rgb(2245,238,205)
                                   text_input="Main menu"
                                   ) 
                                 
@@ -46,7 +46,7 @@ class PauseState(BaseState):
     def draw(self, screen):
         overlay = pygame.Surface((self.game.width, self.game.height), pygame.SRCALPHA)
         overlay.set_alpha(150)
-        overlay.fill((128,128,128,))
+        overlay.fill((128,128,128))
         screen.blit(overlay, (0,0))
         
         screen.blit(self.title_text, self.title_rect)
