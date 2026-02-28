@@ -7,7 +7,7 @@ class PauseState(BaseState):
         center_x = self.game.width // 2
         center_y = self.game.height // 2
         
-        self.font_title = pygame.font.Font('PressStart2P.ttf', 100)
+        self.font_title = pygame.font.Font('LuckiestGuy-Regular.ttf', 120)
         self.title_text = self.font_title.render("Paused", True, (133,4,34))
         self.title_rect = self.title_text.get_rect(center=(center_x, center_y - 200))
         
@@ -45,7 +45,7 @@ class PauseState(BaseState):
 
     def draw(self, screen):
         overlay = pygame.Surface((self.game.width, self.game.height), pygame.SRCALPHA)
-        overlay.set_alpha(150)
+        overlay.set_alpha(100)
         overlay.fill((128,128,128))
         screen.blit(overlay, (0,0))
         

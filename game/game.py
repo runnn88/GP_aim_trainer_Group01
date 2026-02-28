@@ -23,7 +23,7 @@ class Game:
         self._create_display()
 
         self.clock = pygame.time.Clock()        
-        self.font = pygame.font.Font('PressStart2P.ttf', 50)
+        self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 50)
 
         # --- State Machine ---
         self.state_machine = StateMachine()

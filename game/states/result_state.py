@@ -7,8 +7,8 @@ class ResultState(BaseState):
         self.results = results_data
 
     def enter(self):
-        self.font_large = pygame.font.Font('PressStart2P.ttf', 60)
-        self.font_small = pygame.font.Font('PressStart2P.ttf', 30)
+        self.font_large = pygame.font.Font('LuckiestGuy-Regular.ttf', 60)
+        self.font_small = pygame.font.Font('LuckiestGuy-Regular.ttf', 30)
 
         hits = self.results["hits"]
         misses = self.results["misses"]

@@ -7,16 +7,16 @@ class HUD:
         self.height = game.height 
         
         self.bar_height = 80 
-        self.font = pygame.font.Font('PressStart2P.ttf', 25)
+        self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 40)
         self.top_bar = pygame.Rect(0,0, self.width, self.bar_height)
         
     def draw(self, screen, time_left, score, hit, miss):
         pygame.draw.rect(screen, (20,71,88), self.top_bar)
         
         time_text = self.font.render(f"{max(0, time_left):.1f}", True, (245,238,205))
-        hit_text = self.font.render(f"Hit:{hit}", True, (245,238,205))
-        miss_text = self.font.render(f"Missed:{miss}", True, (245,238,205)) # rgb(245,238,205)
-        score_text = self.font.render(f"Score:{score}", True, (245,238,205))
+        hit_text = self.font.render(f"Hit: {hit}", True, (245,238,205))
+        miss_text = self.font.render(f"Missed: {miss}", True, (245,238,205)) # rgb(245,238,205)
+        score_text = self.font.render(f"Score: {score}", True, (245,238,205))
         combo = self.font.render(f"Combo x0", True, (245,238,205))
         pause = self.font.render("||", True, (245,238,205))
         
