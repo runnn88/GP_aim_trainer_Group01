@@ -1,11 +1,15 @@
 import pygame
-from .base_state import BaseState 
+from .base_state import BaseState
 from game.target import Target
 from ui.hud import HUD
+
 
 class PlayingState(BaseState):
     def enter(self):
         self.miss_click_penalty = 15
+        self.spawn_delay = self.game.settings["spawn_delay"]
+        self.spawn_delay_timer = 0.0
+        self.target_active = True
         self.duration = self.game.settings["duration"]
         self.time_left = self.duration
 
@@ -43,10 +47,13 @@ class PlayingState(BaseState):
                     self.game.state_machine.push(PauseState(self.game))
                     return
 
+                if not self.target_active:
+                    return
+
                 if self.target.is_hit(event.pos):
                     self.register_hit()
                 else:
-                    self.register_miss(is_miss_click=True)
+                    self.register_miss_click()
 
     # ------------------------------------------
     def update(self, dt):
@@ -60,18 +67,25 @@ class PlayingState(BaseState):
                 "combo": self.max_combo,
                 "hits": self.hits,
                 "misses": self.misses,
-                "reaction_times": self.reaction_times
+                "reaction_times": self.reaction_times,
             }
 
             self.game.update_persistent_stats(self.score, self.max_combo)
             self.game.state_machine.change(ResultState(self.game, results_data))
             return
 
-        self.target.update(dt)
+        if self.target_active:
+            self.target.update(dt)
 
-        if self.target.is_expired():
-            self.register_miss(is_miss_click=False)
-        
+            if self.target.is_expired():
+                self.register_timeout_miss()
+        elif self.spawn_delay_timer > 0:
+            self.spawn_delay_timer -= dt
+            if self.spawn_delay_timer <= 0:
+                self.target.spawn()
+                self.spawn_time = pygame.time.get_ticks() / 1000.0
+                self.target_active = True
+
         mouse_pos = pygame.mouse.get_pos()
         self.hud.pause.changeColor(mouse_pos)
 
@@ -94,26 +108,35 @@ class PlayingState(BaseState):
         bonus = max(0, ttl - reaction) / ttl * bonus_cap
         self.score += int((base_points + bonus) * combo_multiplier)
 
-        self.target.spawn()
-        self.spawn_time = pygame.time.get_ticks() / 1000.0
+        self.queue_next_target()
 
     # ------------------------------------------
-    def register_miss(self, is_miss_click=False):
+    def register_miss_click(self):
         self.misses += 1
         self.combo = 0
+        self.score = max(0, self.score - self.miss_click_penalty)
 
-        if is_miss_click:
-            self.score = max(0, self.score - self.miss_click_penalty)
+    def register_timeout_miss(self):
+        self.misses += 1
+        self.combo = 0
+        self.queue_next_target()
 
-        self.target.spawn()
-        self.spawn_time = pygame.time.get_ticks() / 1000.0
+    def queue_next_target(self):
+        if self.spawn_delay > 0:
+            self.target_active = False
+            self.spawn_delay_timer = self.spawn_delay
+        else:
+            self.target.spawn()
+            self.spawn_time = pygame.time.get_ticks() / 1000.0
+            self.target_active = True
 
     # ------------------------------------------
     def draw(self, screen):
-        screen.fill((245,238,205))
+        screen.fill((245, 238, 205))
 
         # Draw target
-        self.target.draw(screen)
+        if self.target_active:
+            self.target.draw(screen)
 
         # HUD
         self.hud.draw(screen, self.time_left, self.score, self.hits, self.misses, self.combo)

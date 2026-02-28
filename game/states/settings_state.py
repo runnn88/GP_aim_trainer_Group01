@@ -31,14 +31,20 @@ class SettingsState(BaseState):
             ("Blue", (52, 132, 235)),
             ("Yellow", (240, 200, 40)),
         ]
-        self.duration_buttons = self._build_option_buttons(center_x, 160, self.duration_options)
-        self.size_buttons = self._build_option_buttons(center_x, 250, self.size_options)
-        self.difficulty_buttons = self._build_option_buttons(center_x, 340, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 430, self.color_options)
+        self.delay_options = [
+            ("None (Default)", 0.0),
+            ("100ms", 0.1),
+            ("250ms", 0.25),
+        ]
+        self.duration_buttons = self._build_option_buttons(center_x, 145, self.duration_options)
+        self.size_buttons = self._build_option_buttons(center_x, 225, self.size_options)
+        self.difficulty_buttons = self._build_option_buttons(center_x, 305, self.difficulty_options)
+        self.color_buttons = self._build_option_buttons(center_x, 385, self.color_options)
+        self.delay_buttons = self._build_option_buttons(center_x, 465, self.delay_options)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 540),
+            pos=(center_x, 560),
             font=self.font_option,
             base_color=(129, 2, 31),
             hovering_color=(20, 71, 88),
@@ -93,6 +99,11 @@ class SettingsState(BaseState):
                 self.game.settings["target_color"] = self.color_options[i][1]
                 return
 
+        for i, button in enumerate(self.delay_buttons):
+            if button.checkForInput(mouse_pos):
+                self.game.settings["spawn_delay"] = self.delay_options[i][1]
+                return
+
         if self.back_button.checkForInput(mouse_pos):
             from game.states import StartState
             self.game.state_machine.change(StartState(self.game))
@@ -122,6 +133,9 @@ class SettingsState(BaseState):
         self._set_group_button_style(
             self.color_buttons, self.color_options, self.game.settings["target_color"]
         )
+        self._set_group_button_style(
+            self.delay_buttons, self.delay_options, self.game.settings["spawn_delay"]
+        )
 
         for button in self.duration_buttons:
             button.changeColor(mouse_pos)
@@ -130,6 +144,8 @@ class SettingsState(BaseState):
         for button in self.difficulty_buttons:
             button.changeColor(mouse_pos)
         for button in self.color_buttons:
+            button.changeColor(mouse_pos)
+        for button in self.delay_buttons:
             button.changeColor(mouse_pos)
         self.back_button.changeColor(mouse_pos)
 
@@ -145,11 +161,13 @@ class SettingsState(BaseState):
         size_text = self.font_section.render("Target Size", True, (20, 71, 88))
         difficulty_text = self.font_section.render("Difficulty", True, (20, 71, 88))
         color_text = self.font_section.render("Target Color", True, (20, 71, 88))
+        delay_text = self.font_section.render("Delay", True, (20, 71, 88))
 
-        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 115)))
-        screen.blit(size_text, size_text.get_rect(center=(center_x, 205)))
-        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 295)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 385)))
+        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 105)))
+        screen.blit(size_text, size_text.get_rect(center=(center_x, 185)))
+        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 265)))
+        screen.blit(color_text, color_text.get_rect(center=(center_x, 345)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 425)))
 
         for button in self.duration_buttons:
             button.update(screen)
@@ -158,5 +176,7 @@ class SettingsState(BaseState):
         for button in self.difficulty_buttons:
             button.update(screen)
         for button in self.color_buttons:
+            button.update(screen)
+        for button in self.delay_buttons:
             button.update(screen)
         self.back_button.update(screen)
