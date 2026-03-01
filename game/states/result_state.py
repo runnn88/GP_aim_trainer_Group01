@@ -8,7 +8,8 @@ class ResultState(BaseState):
 
     def enter(self):
         self.font_large = pygame.font.Font('LuckiestGuy-Regular.ttf', 120)
-        self.font_small = pygame.font.Font('LuckiestGuy-Regular.ttf', 60)
+        self.font_small = pygame.font.Font('LuckiestGuy-Regular.ttf', 30)
+        self.font_score = pygame.font.Font('LuckiestGuy-Regular.ttf', 80)
 
         hits = self.results["hits"]
         misses = self.results["misses"]
@@ -42,7 +43,7 @@ class ResultState(BaseState):
         screen.fill((129,2,31))
 
         center_x = self.game.width // 2
-        y = 120
+        y = 80
 
         # Title
         title = self.font_large.render("RESULTS", True, (245,238,205))
@@ -53,39 +54,43 @@ class ResultState(BaseState):
         score_text = self.font.render(
             f"Final Score: {self.results['score']}",
             True,
-            (245,238,205)
+            (129,2,31)
         )
-        screen.blit(score_text, score_text.get_rect(center=(center_x, y)))
-        y += 70
+        score_rect = score_text.get_rect(center=(center_x, y))
+        border_rect = score_rect.inflate(52, 28)
+        border_rect.y -= 8
+        pygame.draw.rect(screen, (245,238,205), border_rect, border_radius=40)
+        screen.blit(score_text, score_rect)
+        y += 80
 
         # Hits / Misses
-        hits_text = self.font.render(
+        hits_text = self.font_small.render(
             f"Hits: {self.results['hits']}  |  Misses: {self.results['misses']}",
             True,
             (245,238,205)
         )
         screen.blit(hits_text, hits_text.get_rect(center=(center_x, y)))
-        y += 70
+        y += 80
 
         # Accuracy
-        accuracy_text = self.font.render(
+        accuracy_text = self.font_small.render(
             f"Accuracy: {self.accuracy:.1f}%",
             True,
             (245,238,205)
         )
         screen.blit(accuracy_text, accuracy_text.get_rect(center=(center_x, y)))
-        y += 70
+        y += 80
 
         # Reaction times
-        avg_text = self.font.render(
+        avg_text = self.font_small.render(
             f"Average Reaction: {self.avg_reaction:.3f}s",
             True,
             (245,238,205)
         )
         screen.blit(avg_text, avg_text.get_rect(center=(center_x, y)))
-        y += 70
+        y += 80
 
-        best_text = self.font.render(
+        best_text = self.font_small.render(
             f"Best Reaction: {self.best_reaction:.3f}s",
             True,
             (245,238,205)
@@ -94,7 +99,7 @@ class ResultState(BaseState):
         y += 100
 
         # Instructions
-        restart_text = self.font_small.render(
+        restart_text = self.font.render(
             "Press ENTER to Restart | ESC to Quit",
             True,
             (245,238,205)
