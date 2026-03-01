@@ -9,6 +9,7 @@ class PlayingState(BaseState):
         self.time_left = self.duration
 
         self.font = pygame.font.SysFont(None, 36)
+        self.sound = pygame.mixer.Sound("pop.ogg")
 
         # Stats
         self.hits = 0
@@ -64,6 +65,7 @@ class PlayingState(BaseState):
 
     # ------------------------------------------
     def register_hit(self):
+        self.sound.play()
         current_time = pygame.time.get_ticks() / 1000.0
         reaction = current_time - self.spawn_time
 
