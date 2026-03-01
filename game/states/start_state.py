@@ -48,8 +48,7 @@ class StartState(BaseState):
                                    text_input="Exit"            
         )
 
-        best_score = self.game.persistent_stats["best_score"]
-        highest_combo = self.game.persistent_stats["highest_combo"]
+        best_score, highest_combo = self.game.db.get_absolute_best_score()
         self.best_score_text = self.font_stats.render(
             f"Best Score: {best_score}", True, (245, 238, 205)
         )

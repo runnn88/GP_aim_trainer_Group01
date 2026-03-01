@@ -35,12 +35,12 @@ class Database:
                             LIMIT ?''', (limit,))
         return self.cursor.fetchall()
     
-    def get_recent_stat(self, limit=5):
+    def get_absolute_best_score(self):
         self.cursor.execute('''
-                            SELECT PLAY_DATE, SCORE, ACCURACY, AVG_REACTION, MAX_COMBO
-                            FROM GAME_STATS
-                            ORDER BY ID DESC
-                            LIMIT ?''', (limit,))
+                            SELECT MAX(SCORE), MAX(MAX_COMBO)
+                            FROM GAME_STATS''')
         
-        result = self.cursor.fetchall()
-        return result[::-1]
+        result = self.cursor.fetchone()
+        best_score = result[0] if result[0] is not None else 0
+        best_combo = result[1] if result[1] is not None else 0
+        return best_score, best_combo

@@ -84,7 +84,7 @@ class PlayingState(BaseState):
                 "best_reaction": best_reaction
             }
             
-            self.game.update_persistent_stats(self.score, self.max_combo)
+            # self.game.update_persistent_stats(self.score, self.max_combo)
             self.game.state_machine.change(ResultState(self.game, results_data))
             return
 
