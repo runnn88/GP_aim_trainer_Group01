@@ -7,6 +7,7 @@ from ui.effects import JuiceSplashEffect
 
 class PlayingState(BaseState):
     def enter(self):
+        self.game.play_music("gameplay")
         self.miss_click_penalty = 15
         self.spawn_delay = self.game.settings["spawn_delay"]
         self.progression_enabled = self.game.settings["progression_enabled"]

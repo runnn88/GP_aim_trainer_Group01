@@ -5,6 +5,7 @@ from ui.button import Button
 
 class InstructionState(BaseState):
     def enter(self):
+        self.game.play_music("menu")
         center_x = self.game.width // 2
         center_y = self.game.height // 2
 

@@ -7,6 +7,7 @@ class ResultState(BaseState):
         self.results = results_data
 
     def enter(self):
+        self.game.play_music("menu")
         self.font_large = pygame.font.Font('LuckiestGuy-Regular.ttf', 120)
         self.font_small = pygame.font.Font('LuckiestGuy-Regular.ttf', 30)
         self.font_score = pygame.font.Font('LuckiestGuy-Regular.ttf', 80)

@@ -4,6 +4,7 @@ from ui.button import Button
 
 class StartState(BaseState):
     def enter(self):
+        self.game.play_music("menu")
         """Initialize creating the UI before enter the start state"""
         center_x = self.game.width // 2
         center_y = self.game.height // 2

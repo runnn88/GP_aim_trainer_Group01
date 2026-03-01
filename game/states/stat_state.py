@@ -4,6 +4,7 @@ from ui.button import Button
 
 class StatState(BaseState):
     def enter(self):
+        self.game.play_music("menu")
         center_x = self.game.width // 2
         self.font_title = pygame.font.Font("LuckiestGuy-Regular.ttf", 80)
         self.font_header = self.font

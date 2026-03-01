@@ -19,6 +19,12 @@ class Game:
         self.running = True
 
         pygame.init()
+        self.audio_enabled = True
+        try:
+            if not pygame.mixer.get_init():
+                pygame.mixer.init()
+        except pygame.error:
+            self.audio_enabled = False
         pygame.display.set_caption(self.title)
 
         self._create_display()
@@ -33,6 +39,11 @@ class Game:
             "progression_enabled": False,
             "target_color": (129, 2, 31),
         }
+        self.music_tracks = {
+            "menu": Path("assets/music/menu_music.mp3"),
+            "gameplay": Path("assets/music/gameplay_music.mp3"),
+        }
+        self.current_music_key = None
         # self.stats_file = Path(__file__).resolve().parent.parent / "player_stats.json"
         # self.persistent_stats = self._load_persistent_stats()
         
@@ -90,6 +101,25 @@ class Game:
     
     def quit(self):
         pygame.quit()
+
+    def play_music(self, track_key, volume=0.35):
+        if not self.audio_enabled:
+            return
+
+        if self.current_music_key == track_key:
+            return
+
+        track_path = self.music_tracks.get(track_key)
+        if track_path is None or not track_path.exists():
+            return
+
+        try:
+            pygame.mixer.music.load(str(track_path))
+            pygame.mixer.music.set_volume(volume)
+            pygame.mixer.music.play(-1)
+            self.current_music_key = track_key
+        except pygame.error:
+            pass
 
     # def _load_persistent_stats(self):
     #     default_stats = {"best_score": 0, "highest_combo": 0}
