@@ -119,6 +119,7 @@ class PlayingState(BaseState):
     def register_timeout_miss(self):
         self.misses += 1
         self.combo = 0
+        self.score = max(0, self.score - self.miss_click_penalty)
         self.queue_next_target()
 
     def queue_next_target(self):
