@@ -2,6 +2,7 @@ import pygame
 from .base_state import BaseState
 from game.target import Target
 from ui.hud import HUD
+from ui.effects import JuiceSplashEffect
 
 
 class PlayingState(BaseState):
@@ -24,6 +25,7 @@ class PlayingState(BaseState):
         self.combo = 0
         self.max_combo = 0
         self.reaction_times = []
+        self.hit_effects = []
 
         # Target
         self.base_radius = int(30 * self.game.settings["size_multiplier"])
@@ -105,11 +107,22 @@ class PlayingState(BaseState):
 
         mouse_pos = pygame.mouse.get_pos()
         self.hud.pause.changeColor(mouse_pos)
+        for effect in self.hit_effects:
+            effect.update(dt)
+        self.hit_effects = [effect for effect in self.hit_effects if not effect.is_done()]
         
 
     # ------------------------------------------
     def register_hit(self):
         self.sound.play()
+        self.hit_effects.append(
+            JuiceSplashEffect(
+                self.target.x,
+                self.target.y,
+                self.target.radius,
+                self.target.get_splash_colors(),
+            )
+        )
         current_time = pygame.time.get_ticks() / 1000.0
         reaction = current_time - self.spawn_time
 
@@ -173,6 +186,8 @@ class PlayingState(BaseState):
         # Draw target
         if self.target_active:
             self.target.draw(screen)
+        for effect in self.hit_effects:
+            effect.draw(screen)
 
         # HUD
         self.hud.draw(screen, self.time_left, self.score, self.hits, self.misses, self.combo)
