@@ -13,20 +13,14 @@ class ResultState(BaseState):
 
         hits = self.results["hits"]
         misses = self.results["misses"]
-        reactions = self.results["reaction_times"]
-
-        total_attempts = hits + misses
 
         # Accuracy
-        self.accuracy = (hits / total_attempts * 100) if total_attempts > 0 else 0
+        self.accuracy = self.results["accuracy"]
 
         # Reaction metrics
-        if reactions:
-            self.avg_reaction = sum(reactions) / len(reactions)
-            self.best_reaction = min(reactions)
-        else:
-            self.avg_reaction = 0
-            self.best_reaction = 0
+        self.avg_reaction = self.results["avg_reaction"]
+        self.best_reaction = self.results["best_reaction"]
+            
 
     # ------------------------------------------
     def handle_event(self, event):

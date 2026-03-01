@@ -32,10 +32,10 @@ class StartState(BaseState):
                                    hovering_color= (92,145,163), #rgb(92,145,163)
                                    text_input="Settings"            
         )
-        self.instruction_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 2), 
+        self.stat_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 2), 
                                    font=self.font, base_color= (245,238,205),
                                    hovering_color= (92,145,163), #rgb(92,145,163)
-                                   text_input="Instruction"            
+                                   text_input="History Statistic"            
         )
         self.exit_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 3), 
                                    font=self.font, base_color= (245,238,205),
@@ -79,9 +79,9 @@ class StartState(BaseState):
                     from game.states import SettingsState
                     self.game.state_machine.change(SettingsState(self.game))
 
-                if self.instruction_button.checkForInput(mouse_pos):
-                    from game.states import InstructionState
-                    self.game.state_machine.change(InstructionState(self.game))
+                if self.stat_button.checkForInput(mouse_pos):
+                    from game.states import StatState
+                    self.game.state_machine.change(StatState(self.game))
 
                 if self.exit_button.checkForInput(mouse_pos):
                     self.game.running = False
@@ -91,7 +91,7 @@ class StartState(BaseState):
         mouse_pos = pygame.mouse.get_pos()
         self.start_button.changeColor(mouse_pos)
         self.setting_button.changeColor(mouse_pos)
-        self.instruction_button.changeColor(mouse_pos)
+        self.stat_button.changeColor(mouse_pos)
         self.exit_button.changeColor(mouse_pos)
     
     def draw(self, screen):
@@ -117,7 +117,5 @@ class StartState(BaseState):
 
         self.start_button.update(screen)
         self.setting_button.update(screen)
-        self.instruction_button.update(screen)
+        self.stat_button.update(screen)
         self.exit_button.update(screen)
-        
-        

@@ -4,6 +4,7 @@ from pathlib import Path
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FULLSCREEN, TITLE
 from game.state_machine import StateMachine
 from game.states import StartState
+from game.database import Database
 
 
 class Game:
@@ -27,7 +28,7 @@ class Game:
         self.clock = pygame.time.Clock()        
         self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 50)
         self.settings = {
-            "duration": 60,
+            "duration": 10,
             "size_multiplier": 1.0,
             "ttl_multiplier": 1.0,
             "spawn_delay": 0.0,
@@ -35,6 +36,8 @@ class Game:
         }
         self.stats_file = Path(__file__).resolve().parent.parent / "player_stats.json"
         self.persistent_stats = self._load_persistent_stats()
+        
+        self.db = Database()
 
         # --- State Machine ---
         self.state_machine = StateMachine()

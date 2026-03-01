@@ -62,15 +62,28 @@ class PlayingState(BaseState):
 
         if self.time_left <= 0:
             from game.states import ResultState
-
+            total_clicks = self.hits + self.misses
+            accuracy = round((self.hits / total_clicks * 100) if total_clicks > 0 else 0, 2)
+            if self.reaction_times:
+                avg_reaction = sum(self.reaction_times) / len(self.reaction_times)
+                best_reaction = min(self.reaction_times)
+            else: 
+                avg_reaction = 0.0
+                best_reaction = 0.0
+            avg_reaction = round(avg_reaction,3)
+            self.game.db.insert_result(self.score, accuracy, avg_reaction, 
+                                       self.hits, self.misses, self.max_combo)
+            
             results_data = {
                 "score": self.score,
                 "combo": self.max_combo,
                 "hits": self.hits,
                 "misses": self.misses,
-                "reaction_times": self.reaction_times,
+                "accuracy": accuracy,
+                "avg_reaction": avg_reaction,
+                "best_reaction": best_reaction
             }
-
+            
             self.game.update_persistent_stats(self.score, self.max_combo)
             self.game.state_machine.change(ResultState(self.game, results_data))
             return
@@ -89,6 +102,7 @@ class PlayingState(BaseState):
 
         mouse_pos = pygame.mouse.get_pos()
         self.hud.pause.changeColor(mouse_pos)
+        
 
     # ------------------------------------------
     def register_hit(self):
