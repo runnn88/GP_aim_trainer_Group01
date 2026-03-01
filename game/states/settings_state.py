@@ -6,6 +6,7 @@ from ui.button import Button
 class SettingsState(BaseState):
     def enter(self):
         center_x = self.game.width // 2
+        y_offset = 70
 
         self.font_title = pygame.font.Font("LuckiestGuy-Regular.ttf", 80)
         self.font_section = pygame.font.Font("LuckiestGuy-Regular.ttf", 34)
@@ -40,16 +41,16 @@ class SettingsState(BaseState):
             ("Off (Default)", False),
             ("On", True),
         ]
-        self.progression_buttons = self._build_option_buttons(center_x, 145, self.progression_options)
-        self.duration_buttons = self._build_option_buttons(center_x, 210, self.duration_options)
-        self.size_buttons = self._build_option_buttons(center_x, 275, self.size_options)
-        self.difficulty_buttons = self._build_option_buttons(center_x, 340, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 405, self.color_options)
-        self.delay_buttons = self._build_option_buttons(center_x, 470, self.delay_options)
+        self.progression_buttons = self._build_option_buttons(center_x, 145 + y_offset, self.progression_options)
+        self.duration_buttons = self._build_option_buttons(center_x, 210 + y_offset, self.duration_options)
+        self.size_buttons = self._build_option_buttons(center_x, 275 + y_offset, self.size_options)
+        self.difficulty_buttons = self._build_option_buttons(center_x, 340 + y_offset, self.difficulty_options)
+        self.color_buttons = self._build_option_buttons(center_x, 405 + y_offset, self.color_options)
+        self.delay_buttons = self._build_option_buttons(center_x, 470 + y_offset, self.delay_options)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 630),
+            pos=(center_x, 630 + y_offset),
             font=self.font_section,
             base_color=(129, 2, 31),
             hovering_color=(252,154,154),
@@ -172,9 +173,10 @@ class SettingsState(BaseState):
         screen.fill((245, 238, 205))
 
         center_x = self.game.width // 2
+        y_offset = 70
 
         title_text = self.font_title.render("Settings", True, (129, 2, 31))
-        screen.blit(title_text, title_text.get_rect(center=(center_x, 80)))
+        screen.blit(title_text, title_text.get_rect(center=(center_x, 20 + y_offset)))
 
         progression_text = self.font_section.render("Difficulty Progression", True, (20, 71, 88))
         duration_text = self.font_section.render("Game Duration", True, (20, 71, 88))
@@ -183,12 +185,12 @@ class SettingsState(BaseState):
         color_text = self.font_section.render("Target Color", True, (20, 71, 88))
         delay_text = self.font_section.render("Delay", True, (20, 71, 88))
 
-        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 120)))
-        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 185)))
-        screen.blit(size_text, size_text.get_rect(center=(center_x, 250)))
-        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 315)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 380)))
-        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 445)))
+        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 120 + y_offset)))
+        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 185 + y_offset)))
+        screen.blit(size_text, size_text.get_rect(center=(center_x, 250 + y_offset)))
+        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 315 + y_offset)))
+        screen.blit(color_text, color_text.get_rect(center=(center_x, 380 + y_offset)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 445 + y_offset)))
 
         for button in self.progression_buttons:
             button.update(screen)
