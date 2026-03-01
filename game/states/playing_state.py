@@ -8,6 +8,7 @@ class PlayingState(BaseState):
     def enter(self):
         self.miss_click_penalty = 15
         self.spawn_delay = self.game.settings["spawn_delay"]
+        self.progression_enabled = self.game.settings["progression_enabled"]
         self.spawn_delay_timer = 0.0
         self.target_active = True
         self.duration = self.game.settings["duration"]
@@ -25,10 +26,11 @@ class PlayingState(BaseState):
         self.reaction_times = []
 
         # Target
-        radius = int(30 * self.game.settings["size_multiplier"])
-        ttl = 1.5 * self.game.settings["ttl_multiplier"]
+        self.base_radius = int(30 * self.game.settings["size_multiplier"])
+        self.base_ttl = 1.5 * self.game.settings["ttl_multiplier"]
         target_color = self.game.settings["target_color"]
-        self.target = Target(self.game, radius=radius, ttl=ttl, color=target_color)
+        self.target = Target(self.game, radius=self.base_radius, ttl=self.base_ttl, color=target_color)
+        self._apply_progression_to_target()
         self.spawn_time = pygame.time.get_ticks() / 1000.0
         self.hud = HUD(self.game)
 
@@ -96,6 +98,7 @@ class PlayingState(BaseState):
         elif self.spawn_delay_timer > 0:
             self.spawn_delay_timer -= dt
             if self.spawn_delay_timer <= 0:
+                self._apply_progression_to_target()
                 self.target.spawn()
                 self.spawn_time = pygame.time.get_ticks() / 1000.0
                 self.target_active = True
@@ -143,9 +146,25 @@ class PlayingState(BaseState):
             self.target_active = False
             self.spawn_delay_timer = self.spawn_delay
         else:
+            self._apply_progression_to_target()
             self.target.spawn()
             self.spawn_time = pygame.time.get_ticks() / 1000.0
             self.target_active = True
+
+    def _apply_progression_to_target(self):
+        if not self.progression_enabled:
+            self.target.radius = self.base_radius
+            self.target.ttl = self.base_ttl
+            return
+
+        elapsed_time = self.duration - self.time_left
+        stage = max(0, int(elapsed_time // 10))
+
+        size_scale = max(0.4, 1.0 - 0.1 * stage)
+        ttl_scale = max(0.2, 1.0 - 0.2 * stage)
+
+        self.target.radius = max(8, int(self.base_radius * size_scale))
+        self.target.ttl = max(0.2, self.base_ttl * ttl_scale)
 
     # ------------------------------------------
     def draw(self, screen):

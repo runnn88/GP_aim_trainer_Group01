@@ -30,6 +30,7 @@ class Game:
             "size_multiplier": 1.0,
             "ttl_multiplier": 1.0,
             "spawn_delay": 0.0,
+            "progression_enabled": False,
             "target_color": (129, 2, 31),
         }
         # self.stats_file = Path(__file__).resolve().parent.parent / "player_stats.json"

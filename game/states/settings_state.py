@@ -36,15 +36,20 @@ class SettingsState(BaseState):
             ("100ms", 0.1),
             ("250ms", 0.25),
         ]
-        self.duration_buttons = self._build_option_buttons(center_x, 225, self.duration_options)
-        self.size_buttons = self._build_option_buttons(center_x, 305, self.size_options)
-        self.difficulty_buttons = self._build_option_buttons(center_x, 385, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 465, self.color_options)
-        self.delay_buttons = self._build_option_buttons(center_x, 545, self.delay_options)
+        self.progression_options = [
+            ("Off (Default)", False),
+            ("On", True),
+        ]
+        self.progression_buttons = self._build_option_buttons(center_x, 145, self.progression_options)
+        self.duration_buttons = self._build_option_buttons(center_x, 210, self.duration_options)
+        self.size_buttons = self._build_option_buttons(center_x, 275, self.size_options)
+        self.difficulty_buttons = self._build_option_buttons(center_x, 340, self.difficulty_options)
+        self.color_buttons = self._build_option_buttons(center_x, 405, self.color_options)
+        self.delay_buttons = self._build_option_buttons(center_x, 470, self.delay_options)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 620),
+            pos=(center_x, 630),
             font=self.font_section,
             base_color=(129, 2, 31),
             hovering_color=(252,154,154),
@@ -52,8 +57,12 @@ class SettingsState(BaseState):
         )
 
     def _build_option_buttons(self, center_x, y, options):
-        spacing = 320
-        start_x = center_x - spacing
+        if len(options) == 2:
+            spacing = 360
+            start_x = center_x - (spacing // 2)
+        else:
+            spacing = 320
+            start_x = center_x - spacing
         buttons = []
         for i, (label, _) in enumerate(options):
             buttons.append(
@@ -78,6 +87,11 @@ class SettingsState(BaseState):
             return
 
         mouse_pos = pygame.mouse.get_pos()
+
+        for i, button in enumerate(self.progression_buttons):
+            if button.checkForInput(mouse_pos):
+                self.game.settings["progression_enabled"] = self.progression_options[i][1]
+                return
 
         for i, button in enumerate(self.duration_buttons):
             if button.checkForInput(mouse_pos):
@@ -122,6 +136,9 @@ class SettingsState(BaseState):
         mouse_pos = pygame.mouse.get_pos()
 
         self._set_group_button_style(
+            self.progression_buttons, self.progression_options, self.game.settings["progression_enabled"]
+        )
+        self._set_group_button_style(
             self.duration_buttons, self.duration_options, self.game.settings["duration"]
         )
         self._set_group_button_style(
@@ -137,6 +154,8 @@ class SettingsState(BaseState):
             self.delay_buttons, self.delay_options, self.game.settings["spawn_delay"]
         )
 
+        for button in self.progression_buttons:
+            button.changeColor(mouse_pos)
         for button in self.duration_buttons:
             button.changeColor(mouse_pos)
         for button in self.size_buttons:
@@ -155,20 +174,24 @@ class SettingsState(BaseState):
         center_x = self.game.width // 2
 
         title_text = self.font_title.render("Settings", True, (129, 2, 31))
-        screen.blit(title_text, title_text.get_rect(center=(center_x, 100)))
+        screen.blit(title_text, title_text.get_rect(center=(center_x, 80)))
 
+        progression_text = self.font_section.render("Difficulty Progression", True, (20, 71, 88))
         duration_text = self.font_section.render("Game Duration", True, (20, 71, 88))
         size_text = self.font_section.render("Target Size", True, (20, 71, 88))
         difficulty_text = self.font_section.render("Difficulty", True, (20, 71, 88))
         color_text = self.font_section.render("Target Color", True, (20, 71, 88))
         delay_text = self.font_section.render("Delay", True, (20, 71, 88))
 
+        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 120)))
         screen.blit(duration_text, duration_text.get_rect(center=(center_x, 185)))
-        screen.blit(size_text, size_text.get_rect(center=(center_x, 265)))
-        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 345)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 425)))
-        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 505)))
+        screen.blit(size_text, size_text.get_rect(center=(center_x, 250)))
+        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 315)))
+        screen.blit(color_text, color_text.get_rect(center=(center_x, 380)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 445)))
 
+        for button in self.progression_buttons:
+            button.update(screen)
         for button in self.duration_buttons:
             button.update(screen)
         for button in self.size_buttons:
