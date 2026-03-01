@@ -63,6 +63,14 @@ class ResultState(BaseState):
         screen.blit(score_text, score_rect)
         y += 80
 
+        combo_text = self.font.render(
+            f"Highest Combo: x{self.results.get('combo', 0)}",
+            True,
+            (245,238,205)
+        )
+        screen.blit(combo_text, combo_text.get_rect(center=(center_x, y)))
+        y += 70
+
         # Hits / Misses
         hits_text = self.font_small.render(
             f"Hits: {self.results['hits']}  |  Misses: {self.results['misses']}",

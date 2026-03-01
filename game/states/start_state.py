@@ -8,30 +8,48 @@ class StartState(BaseState):
         center_x = self.game.width // 2
         center_y = self.game.height // 2
         
-        self.font_title = pygame.font.Font('LuckiestGuy-Regular.ttf', 185)
-        self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 60)
+        self.font_title = pygame.font.Font('LuckiestGuy-Regular.ttf', 120)
+        self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 52)
+        self.font_stats = pygame.font.Font('LuckiestGuy-Regular.ttf', 26)
         # self.font_title.set_bold(True)
-        self.title_text1 = self.create_title_outline(self.font_title, "AIM", 33, (245,238,205), (129,2,31))
-        self.title_text2 = self.create_title_outline(self.font_title, "TRAINER", 33, (245,238,205), (129,2,31))
+        self.title_text1 = self.create_title_outline(self.font_title, "AIM", 20, (245,238,205), (129,2,31))
+        self.title_text2 = self.create_title_outline(self.font_title, "TRAINER", 20, (245,238,205), (129,2,31))
         
-        self.title_rect1 = self.title_text1.get_rect(topleft=(386- 35, 98 - 35))
-        self.title_rect2 = self.title_text2.get_rect(topleft=(280 -35, 263 - 35))
+        self.title_rect1 = self.title_text1.get_rect(center=(center_x, 95))
+        self.title_rect2 = self.title_text2.get_rect(center=(center_x, 205))
 
         
-        self.start_button = Button(image=None, pos=(center_x, center_y + 140), 
+        button_start_y = center_y + 120
+        button_gap = 68
+
+        self.start_button = Button(image=None, pos=(center_x, button_start_y), 
                                    font=self.font, base_color= (245,238,205),
                                    hovering_color= (92,145,163), #rgb(92,145,163)
                                    text_input="Start"            
         )
-        self.setting_button = Button(image=None, pos=(center_x, center_y + 220), 
+        self.setting_button = Button(image=None, pos=(center_x, button_start_y + button_gap), 
                                    font=self.font, base_color= (245,238,205),
                                    hovering_color= (92,145,163), #rgb(92,145,163)
-                                   text_input="Setting"            
+                                   text_input="Settings"            
         )
-        self.exit_button = Button(image=None, pos=(center_x, center_y + 300), 
+        self.instruction_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 2), 
+                                   font=self.font, base_color= (245,238,205),
+                                   hovering_color= (92,145,163), #rgb(92,145,163)
+                                   text_input="Instruction"            
+        )
+        self.exit_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 3), 
                                    font=self.font, base_color= (245,238,205),
                                    hovering_color= (92,145,163), #rgb(92,145,163)
                                    text_input="Exit"            
+        )
+
+        best_score = self.game.persistent_stats["best_score"]
+        highest_combo = self.game.persistent_stats["highest_combo"]
+        self.best_score_text = self.font_stats.render(
+            f"Best Score: {best_score}", True, (245, 238, 205)
+        )
+        self.best_combo_text = self.font_stats.render(
+            f"Highest Combo: x{highest_combo}", True, (245, 238, 205)
         )
         
     def create_title_outline(self, font, text, thickness, outline_color, text_color):
@@ -57,6 +75,14 @@ class StartState(BaseState):
                     from game.states import PlayingState
                     self.game.state_machine.change(PlayingState(self.game))
 
+                if self.setting_button.checkForInput(mouse_pos):
+                    from game.states import SettingsState
+                    self.game.state_machine.change(SettingsState(self.game))
+
+                if self.instruction_button.checkForInput(mouse_pos):
+                    from game.states import InstructionState
+                    self.game.state_machine.change(InstructionState(self.game))
+
                 if self.exit_button.checkForInput(mouse_pos):
                     self.game.running = False
 
@@ -64,6 +90,8 @@ class StartState(BaseState):
         """Change color for hovering"""
         mouse_pos = pygame.mouse.get_pos()
         self.start_button.changeColor(mouse_pos)
+        self.setting_button.changeColor(mouse_pos)
+        self.instruction_button.changeColor(mouse_pos)
         self.exit_button.changeColor(mouse_pos)
     
     def draw(self, screen):
@@ -84,9 +112,12 @@ class StartState(BaseState):
         
         screen.blit(self.title_text2, self.title_rect2)
         screen.blit(self.title_text1, self.title_rect1)
+        screen.blit(self.best_score_text, self.best_score_text.get_rect(center=(center_x, center_y + 20)))
+        screen.blit(self.best_combo_text, self.best_combo_text.get_rect(center=(center_x, center_y + 55)))
 
         self.start_button.update(screen)
         self.setting_button.update(screen)
+        self.instruction_button.update(screen)
         self.exit_button.update(screen)
         
         
