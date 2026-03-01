@@ -104,7 +104,7 @@ class ResultState(BaseState):
             (245,238,205)
         )
         screen.blit(best_text, best_text.get_rect(center=(center_x, y)))
-        y += 100
+        y += 80
 
         # Instructions
         restart_text = self.font.render(

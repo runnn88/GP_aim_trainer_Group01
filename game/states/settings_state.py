@@ -36,18 +36,18 @@ class SettingsState(BaseState):
             ("100ms", 0.1),
             ("250ms", 0.25),
         ]
-        self.duration_buttons = self._build_option_buttons(center_x, 145, self.duration_options)
-        self.size_buttons = self._build_option_buttons(center_x, 225, self.size_options)
-        self.difficulty_buttons = self._build_option_buttons(center_x, 305, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 385, self.color_options)
-        self.delay_buttons = self._build_option_buttons(center_x, 465, self.delay_options)
+        self.duration_buttons = self._build_option_buttons(center_x, 225, self.duration_options)
+        self.size_buttons = self._build_option_buttons(center_x, 305, self.size_options)
+        self.difficulty_buttons = self._build_option_buttons(center_x, 385, self.difficulty_options)
+        self.color_buttons = self._build_option_buttons(center_x, 465, self.color_options)
+        self.delay_buttons = self._build_option_buttons(center_x, 545, self.delay_options)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 560),
-            font=self.font_option,
+            pos=(center_x, 620),
+            font=self.font_section,
             base_color=(129, 2, 31),
-            hovering_color=(20, 71, 88),
+            hovering_color=(252,154,154),
             text_input="Back",
         )
 
@@ -62,7 +62,7 @@ class SettingsState(BaseState):
                     pos=(start_x + i * spacing, y),
                     font=self.font_option,
                     base_color=(129, 2, 31),
-                    hovering_color=(20, 71, 88),
+                    hovering_color=(252,154,154),
                     text_input=label,
                 )
             )
@@ -113,10 +113,10 @@ class SettingsState(BaseState):
             option_value = options[i][1]
             if option_value == selected_value:
                 button.base_color = (0, 0, 0)
-                button.hovering_color = (0, 0, 0)
+                button.hovering_color = (207,207,207)
             else:
-                button.base_color = (129, 2, 31)
-                button.hovering_color = (20, 71, 88)
+                button.base_color = (129, 2, 31) #rgb(129,2,31)
+                button.hovering_color = (252,154,154) #rgb(252,154,154)
 
     def update(self, dt):
         mouse_pos = pygame.mouse.get_pos()
@@ -155,7 +155,7 @@ class SettingsState(BaseState):
         center_x = self.game.width // 2
 
         title_text = self.font_title.render("Settings", True, (129, 2, 31))
-        screen.blit(title_text, title_text.get_rect(center=(center_x, 60)))
+        screen.blit(title_text, title_text.get_rect(center=(center_x, 100)))
 
         duration_text = self.font_section.render("Game Duration", True, (20, 71, 88))
         size_text = self.font_section.render("Target Size", True, (20, 71, 88))
@@ -163,11 +163,11 @@ class SettingsState(BaseState):
         color_text = self.font_section.render("Target Color", True, (20, 71, 88))
         delay_text = self.font_section.render("Delay", True, (20, 71, 88))
 
-        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 105)))
-        screen.blit(size_text, size_text.get_rect(center=(center_x, 185)))
-        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 265)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 345)))
-        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 425)))
+        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 185)))
+        screen.blit(size_text, size_text.get_rect(center=(center_x, 265)))
+        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 345)))
+        screen.blit(color_text, color_text.get_rect(center=(center_x, 425)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 505)))
 
         for button in self.duration_buttons:
             button.update(screen)

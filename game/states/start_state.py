@@ -8,18 +8,18 @@ class StartState(BaseState):
         center_x = self.game.width // 2
         center_y = self.game.height // 2
         
-        self.font_title = pygame.font.Font('LuckiestGuy-Regular.ttf', 120)
+        self.font_title = pygame.font.Font('LuckiestGuy-Regular.ttf', 130)
         self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 52)
         self.font_stats = pygame.font.Font('LuckiestGuy-Regular.ttf', 26)
         # self.font_title.set_bold(True)
         self.title_text1 = self.create_title_outline(self.font_title, "AIM", 20, (245,238,205), (129,2,31))
         self.title_text2 = self.create_title_outline(self.font_title, "TRAINER", 20, (245,238,205), (129,2,31))
         
-        self.title_rect1 = self.title_text1.get_rect(center=(center_x, 95))
-        self.title_rect2 = self.title_text2.get_rect(center=(center_x, 205))
+        self.title_rect1 = self.title_text1.get_rect(center=(center_x, 130))
+        self.title_rect2 = self.title_text2.get_rect(center=(center_x, 240))
 
         
-        button_start_y = center_y + 120
+        button_start_y = center_y + 90
         button_gap = 68
 
         self.start_button = Button(image=None, pos=(center_x, button_start_y), 
@@ -112,8 +112,8 @@ class StartState(BaseState):
         
         screen.blit(self.title_text2, self.title_rect2)
         screen.blit(self.title_text1, self.title_rect1)
-        screen.blit(self.best_score_text, self.best_score_text.get_rect(center=(center_x, center_y + 20)))
-        screen.blit(self.best_combo_text, self.best_combo_text.get_rect(center=(center_x, center_y + 55)))
+        screen.blit(self.best_score_text, self.best_score_text.get_rect(center=(center_x, center_y - 10)))
+        screen.blit(self.best_combo_text, self.best_combo_text.get_rect(center=(center_x, center_y + 25)))
 
         self.start_button.update(screen)
         self.setting_button.update(screen)

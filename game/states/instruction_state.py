@@ -8,9 +8,9 @@ class InstructionState(BaseState):
         center_x = self.game.width // 2
         center_y = self.game.height // 2
 
-        self.font_title = pygame.font.Font("LuckiestGuy-Regular.ttf", 100)
-        self.font_body = pygame.font.Font("LuckiestGuy-Regular.ttf", 38)
-        self.font_hint = pygame.font.Font("LuckiestGuy-Regular.ttf", 30)
+        self.font_title = pygame.font.Font("LuckiestGuy-Regular.ttf", 80)
+        self.font_body = pygame.font.Font("LuckiestGuy-Regular.ttf", 34)
+        self.font_hint = pygame.font.Font("LuckiestGuy-Regular.ttf", 26)
 
         self.message_lines = [
             "Welcome to Aim Trainer!",
@@ -22,7 +22,7 @@ class InstructionState(BaseState):
             pos=(center_x, center_y + 230),
             font=self.font_body,
             base_color=(129, 2, 31),
-            hovering_color=(20, 71, 88),
+            hovering_color=(252,154,154),
             text_input="Back",
         )
 

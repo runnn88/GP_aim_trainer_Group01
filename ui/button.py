@@ -18,8 +18,8 @@ class Button():
         self.is_hovering = False 
         self.glow_text = self.font.render(self.text_input, True, self.hovering_color)
         # self.glow_text.set_alpha(0)
-        self.glow_offset =  [(-4, -4), (4, -4), (-4, 4), (4, 4), 
-                            (-4, 0),  (4, 0),  (0, -4), (0, 4)] 
+        self.glow_offset =  [(-3, -3), (3, -3), (-3, 3), (3, 3), 
+                            (-3, 0),  (3, 0),  (0, -3), (0, 3)] 
     
         
     def update(self, screen):
@@ -44,3 +44,4 @@ class Button():
         else: 
             self.is_hovering = False
         self.text = self.font.render(self.text_input, True, self.base_color)
+        self.glow_text = self.font.render(self.text_input, True, self.hovering_color)
