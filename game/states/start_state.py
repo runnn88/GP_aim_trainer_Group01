@@ -9,7 +9,7 @@ class StartState(BaseState):
         center_y = self.game.height // 2
         
         self.font_title = pygame.font.Font('LuckiestGuy-Regular.ttf', 130)
-        self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 52)
+        self.font = pygame.font.Font('LuckiestGuy-Regular.ttf', 40)
         self.font_stats = pygame.font.Font('LuckiestGuy-Regular.ttf', 26)
         # self.font_title.set_bold(True)
         self.title_text1 = self.create_title_outline(self.font_title, "AIM", 20, (245,238,205), (129,2,31))
@@ -19,8 +19,8 @@ class StartState(BaseState):
         self.title_rect2 = self.title_text2.get_rect(center=(center_x, 240))
 
         
-        button_start_y = center_y + 90
-        button_gap = 68
+        button_start_y = center_y + 70
+        button_gap = 60
 
         self.start_button = Button(image=None, pos=(center_x, button_start_y), 
                                    font=self.font, base_color= (245,238,205),
@@ -32,12 +32,17 @@ class StartState(BaseState):
                                    hovering_color= (92,145,163), #rgb(92,145,163)
                                    text_input="Settings"            
         )
-        self.stat_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 2), 
+        self.instruction_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 2), 
+                                   font=self.font, base_color= (245,238,205),
+                                   hovering_color= (92,145,163), #rgb(92,145,163)
+                                   text_input="Instruction"            
+        )
+        self.stat_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 3), 
                                    font=self.font, base_color= (245,238,205),
                                    hovering_color= (92,145,163), #rgb(92,145,163)
                                    text_input="History Statistic"            
         )
-        self.exit_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 3), 
+        self.exit_button = Button(image=None, pos=(center_x, button_start_y + button_gap * 4), 
                                    font=self.font, base_color= (245,238,205),
                                    hovering_color= (92,145,163), #rgb(92,145,163)
                                    text_input="Exit"            
@@ -78,6 +83,10 @@ class StartState(BaseState):
                 if self.setting_button.checkForInput(mouse_pos):
                     from game.states import SettingsState
                     self.game.state_machine.change(SettingsState(self.game))
+                    
+                if self.instruction_button.checkForInput(mouse_pos):
+                    from game.states import InstructionState
+                    self.game.state_machine.change(InstructionState(self.game))
 
                 if self.stat_button.checkForInput(mouse_pos):
                     from game.states import StatState
@@ -91,6 +100,7 @@ class StartState(BaseState):
         mouse_pos = pygame.mouse.get_pos()
         self.start_button.changeColor(mouse_pos)
         self.setting_button.changeColor(mouse_pos)
+        self.instruction_button.changeColor(mouse_pos)
         self.stat_button.changeColor(mouse_pos)
         self.exit_button.changeColor(mouse_pos)
     
@@ -112,10 +122,11 @@ class StartState(BaseState):
         
         screen.blit(self.title_text2, self.title_rect2)
         screen.blit(self.title_text1, self.title_rect1)
-        screen.blit(self.best_score_text, self.best_score_text.get_rect(center=(center_x, center_y - 10)))
-        screen.blit(self.best_combo_text, self.best_combo_text.get_rect(center=(center_x, center_y + 25)))
+        screen.blit(self.best_score_text, self.best_score_text.get_rect(center=(center_x, center_y - 20 )))
+        screen.blit(self.best_combo_text, self.best_combo_text.get_rect(center=(center_x, center_y + 15)))
 
         self.start_button.update(screen)
         self.setting_button.update(screen)
+        self.instruction_button.update(screen)
         self.stat_button.update(screen)
         self.exit_button.update(screen)
