@@ -18,6 +18,7 @@ class PlayingState(BaseState):
 
         self.font = pygame.font.SysFont(None, 36)
         self.sound = pygame.mixer.Sound("pop.ogg")
+        self.sound.set_volume(self.game.settings["master_volume"])
 
         # Stats
         self.hits = 0

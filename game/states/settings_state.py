@@ -7,7 +7,6 @@ class SettingsState(BaseState):
     def enter(self):
         self.game.play_music("menu")
         center_x = self.game.width // 2
-        y_offset = 70
 
         self.font_title = pygame.font.Font("LuckiestGuy-Regular.ttf", 80)
         self.font_section = pygame.font.Font("LuckiestGuy-Regular.ttf", 34)
@@ -42,29 +41,57 @@ class SettingsState(BaseState):
             ("Off (Default)", False),
             ("On", True),
         ]
-        self.progression_buttons = self._build_option_buttons(center_x, 145 + y_offset, self.progression_options)
-        self.duration_buttons = self._build_option_buttons(center_x, 210 + y_offset, self.duration_options)
-        self.size_buttons = self._build_option_buttons(center_x, 275 + y_offset, self.size_options)
-        self.difficulty_buttons = self._build_option_buttons(center_x, 340 + y_offset, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 405 + y_offset, self.color_options)
-        self.delay_buttons = self._build_option_buttons(center_x, 470 + y_offset, self.delay_options)
+
+        self.progression_buttons = self._build_option_buttons(center_x, 175, self.progression_options)
+        self.duration_buttons = self._build_option_buttons(center_x, 230, self.duration_options)
+        self.size_buttons = self._build_option_buttons(center_x, 285, self.size_options)
+        self.difficulty_buttons = self._build_option_buttons(center_x, 340, self.difficulty_options)
+        self.color_buttons = self._build_option_buttons(center_x, 395, self.color_options)
+        self.delay_buttons = self._build_option_buttons(center_x, 450, self.delay_options)
+        self._init_volume_slider(center_x, 510)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 630 + y_offset),
+            pos=(center_x, 655),
             font=self.font_section,
             base_color=(129, 2, 31),
-            hovering_color=(252,154,154),
+            hovering_color=(252, 154, 154),
             text_input="Back",
         )
 
+    def _init_volume_slider(self, center_x, y):
+        self.slider_rect = pygame.Rect(0, 0, 420, 10)
+        self.slider_rect.center = (center_x, y)
+        self.slider_knob_radius = 14
+        self.dragging_volume = False
+        self._update_volume_knob_from_setting()
+
+    def _update_volume_knob_from_setting(self):
+        volume = self.game.settings["master_volume"]
+        self.slider_knob_x = int(self.slider_rect.left + volume * self.slider_rect.width)
+        self.slider_knob_y = self.slider_rect.centery
+
+    def _set_volume_from_mouse(self, mouse_x):
+        clamped_x = max(self.slider_rect.left, min(mouse_x, self.slider_rect.right))
+        volume = (clamped_x - self.slider_rect.left) / self.slider_rect.width
+        self.game.set_master_volume(volume)
+        self._update_volume_knob_from_setting()
+
     def _build_option_buttons(self, center_x, y, options):
-        if len(options) == 2:
+        option_count = len(options)
+        if option_count == 2:
             spacing = 360
             start_x = center_x - (spacing // 2)
-        else:
+        elif option_count == 3:
             spacing = 320
             start_x = center_x - spacing
+        elif option_count == 4:
+            spacing = 250
+            start_x = center_x - int(spacing * 1.5)
+        else:
+            spacing = 200
+            start_x = center_x - int(spacing * (option_count - 1) / 2)
+
         buttons = []
         for i, (label, _) in enumerate(options):
             buttons.append(
@@ -73,7 +100,7 @@ class SettingsState(BaseState):
                     pos=(start_x + i * spacing, y),
                     font=self.font_option,
                     base_color=(129, 2, 31),
-                    hovering_color=(252,154,154),
+                    hovering_color=(252, 154, 154),
                     text_input=label,
                 )
             )
@@ -82,13 +109,27 @@ class SettingsState(BaseState):
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             from game.states import StartState
+
             self.game.state_machine.change(StartState(self.game))
+            return
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            self.dragging_volume = False
+            return
+
+        if event.type == pygame.MOUSEMOTION and self.dragging_volume:
+            self._set_volume_from_mouse(event.pos[0])
             return
 
         if event.type != pygame.MOUSEBUTTONDOWN or event.button != 1:
             return
 
         mouse_pos = pygame.mouse.get_pos()
+
+        if self.slider_rect.inflate(0, 24).collidepoint(mouse_pos):
+            self.dragging_volume = True
+            self._set_volume_from_mouse(mouse_pos[0])
+            return
 
         for i, button in enumerate(self.progression_buttons):
             if button.checkForInput(mouse_pos):
@@ -122,6 +163,7 @@ class SettingsState(BaseState):
 
         if self.back_button.checkForInput(mouse_pos):
             from game.states import StartState
+
             self.game.state_machine.change(StartState(self.game))
 
     def _set_group_button_style(self, buttons, options, selected_value):
@@ -129,10 +171,10 @@ class SettingsState(BaseState):
             option_value = options[i][1]
             if option_value == selected_value:
                 button.base_color = (0, 0, 0)
-                button.hovering_color = (207,207,207)
+                button.hovering_color = (207, 207, 207)
             else:
-                button.base_color = (129, 2, 31) #rgb(129,2,31)
-                button.hovering_color = (252,154,154) #rgb(252,154,154)
+                button.base_color = (129, 2, 31)
+                button.hovering_color = (252, 154, 154)
 
     def update(self, dt):
         mouse_pos = pygame.mouse.get_pos()
@@ -155,6 +197,8 @@ class SettingsState(BaseState):
         self._set_group_button_style(
             self.delay_buttons, self.delay_options, self.game.settings["spawn_delay"]
         )
+        if not self.dragging_volume:
+            self._update_volume_knob_from_setting()
 
         for button in self.progression_buttons:
             button.changeColor(mouse_pos)
@@ -174,10 +218,9 @@ class SettingsState(BaseState):
         screen.fill((245, 238, 205))
 
         center_x = self.game.width // 2
-        y_offset = 70
 
         title_text = self.font_title.render("Settings", True, (129, 2, 31))
-        screen.blit(title_text, title_text.get_rect(center=(center_x, 20 + y_offset)))
+        screen.blit(title_text, title_text.get_rect(center=(center_x, 65)))
 
         progression_text = self.font_section.render("Difficulty Progression", True, (20, 71, 88))
         duration_text = self.font_section.render("Game Duration", True, (20, 71, 88))
@@ -185,13 +228,35 @@ class SettingsState(BaseState):
         difficulty_text = self.font_section.render("Difficulty", True, (20, 71, 88))
         color_text = self.font_section.render("Target Color", True, (20, 71, 88))
         delay_text = self.font_section.render("Delay", True, (20, 71, 88))
+        volume_text = self.font_section.render("Volume", True, (20, 71, 88))
 
-        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 120 + y_offset)))
-        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 185 + y_offset)))
-        screen.blit(size_text, size_text.get_rect(center=(center_x, 250 + y_offset)))
-        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 315 + y_offset)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 380 + y_offset)))
-        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 445 + y_offset)))
+        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 145)))
+        screen.blit(duration_text, duration_text.get_rect(center=(center_x, 200)))
+        screen.blit(size_text, size_text.get_rect(center=(center_x, 255)))
+        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 310)))
+        screen.blit(color_text, color_text.get_rect(center=(center_x, 365)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 420)))
+        screen.blit(volume_text, volume_text.get_rect(center=(center_x, 475)))
+
+        pygame.draw.rect(screen, (180, 180, 180), self.slider_rect, border_radius=6)
+        fill_rect = self.slider_rect.copy()
+        fill_rect.width = max(1, self.slider_knob_x - self.slider_rect.left)
+        pygame.draw.rect(screen, (20, 71, 88), fill_rect, border_radius=6)
+        pygame.draw.circle(
+            screen,
+            (129, 2, 31),
+            (self.slider_knob_x, self.slider_knob_y),
+            self.slider_knob_radius,
+        )
+        pygame.draw.circle(
+            screen,
+            (245, 238, 205),
+            (self.slider_knob_x, self.slider_knob_y),
+            max(2, self.slider_knob_radius - 6),
+        )
+        volume_percent = int(self.game.settings["master_volume"] * 100)
+        volume_value = self.font_option.render(f"{volume_percent}%", True, (129, 2, 31))
+        screen.blit(volume_value, volume_value.get_rect(center=(center_x, 545)))
 
         for button in self.progression_buttons:
             button.update(screen)

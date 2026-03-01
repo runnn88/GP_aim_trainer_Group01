@@ -37,6 +37,7 @@ class Game:
             "ttl_multiplier": 1.0,
             "spawn_delay": 0.0,
             "progression_enabled": False,
+            "master_volume": 0.35,
             "target_color": (129, 2, 31),
         }
         self.music_tracks = {
@@ -115,11 +116,18 @@ class Game:
 
         try:
             pygame.mixer.music.load(str(track_path))
-            pygame.mixer.music.set_volume(volume)
+            applied_volume = self.settings.get("master_volume", volume)
+            pygame.mixer.music.set_volume(applied_volume)
             pygame.mixer.music.play(-1)
             self.current_music_key = track_key
         except pygame.error:
             pass
+
+    def set_master_volume(self, volume):
+        volume = max(0.0, min(1.0, float(volume)))
+        self.settings["master_volume"] = volume
+        if self.audio_enabled:
+            pygame.mixer.music.set_volume(volume)
 
     # def _load_persistent_stats(self):
     #     default_stats = {"best_score": 0, "highest_combo": 0}
