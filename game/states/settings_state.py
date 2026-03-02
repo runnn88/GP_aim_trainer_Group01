@@ -42,17 +42,17 @@ class SettingsState(BaseState):
             ("On", True),
         ]
 
-        self.progression_buttons = self._build_option_buttons(center_x, 175, self.progression_options)
-        self.duration_buttons = self._build_option_buttons(center_x, 230, self.duration_options)
-        self.size_buttons = self._build_option_buttons(center_x, 285, self.size_options)
-        self.difficulty_buttons = self._build_option_buttons(center_x, 340, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 395, self.color_options)
-        self.delay_buttons = self._build_option_buttons(center_x, 450, self.delay_options)
-        self._init_volume_slider(center_x, 510)
+        self.progression_buttons = self._build_option_buttons(center_x, 160, self.progression_options)
+        self.duration_buttons = self._build_option_buttons(center_x, 240, self.duration_options)
+        self.size_buttons = self._build_option_buttons(center_x, 320, self.size_options)
+        self.difficulty_buttons = self._build_option_buttons(center_x, 400, self.difficulty_options)
+        self.color_buttons = self._build_option_buttons(center_x, 480, self.color_options)
+        self.delay_buttons = self._build_option_buttons(center_x, 560, self.delay_options)
+        self._init_volume_slider(center_x, 620)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 655),
+            pos=(center_x, 670),
             font=self.font_section,
             base_color=(129, 2, 31),
             hovering_color=(252, 154, 154),
@@ -230,13 +230,13 @@ class SettingsState(BaseState):
         delay_text = self.font_section.render("Delay", True, (20, 71, 88))
         volume_text = self.font_section.render("Volume", True, (20, 71, 88))
 
-        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 145)))
+        screen.blit(progression_text, progression_text.get_rect(center=(center_x, 120)))
         screen.blit(duration_text, duration_text.get_rect(center=(center_x, 200)))
-        screen.blit(size_text, size_text.get_rect(center=(center_x, 255)))
-        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 310)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 365)))
-        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 420)))
-        screen.blit(volume_text, volume_text.get_rect(center=(center_x, 475)))
+        screen.blit(size_text, size_text.get_rect(center=(center_x, 280)))
+        screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 360)))
+        screen.blit(color_text, color_text.get_rect(center=(center_x, 440)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 520)))
+        screen.blit(volume_text, volume_text.get_rect(center=(center_x, 600)))
 
         pygame.draw.rect(screen, (180, 180, 180), self.slider_rect, border_radius=6)
         fill_rect = self.slider_rect.copy()
@@ -256,7 +256,7 @@ class SettingsState(BaseState):
         )
         volume_percent = int(self.game.settings["master_volume"] * 100)
         volume_value = self.font_option.render(f"{volume_percent}%", True, (129, 2, 31))
-        screen.blit(volume_value, volume_value.get_rect(center=(center_x, 545)))
+        screen.blit(volume_value, volume_value.get_rect(center=(center_x, 640)))
 
         for button in self.progression_buttons:
             button.update(screen)
