@@ -27,11 +27,6 @@ class SettingsState(BaseState):
             ("Easy", 2.0),
             ("Hard", 0.5),
         ]
-        self.color_options = [
-            ("Default", (129, 2, 31)),
-            ("Blue", (52, 132, 235)),
-            ("Yellow", (240, 200, 40)),
-        ]
         self.delay_options = [
             ("None (Default)", 0.0),
             ("100ms", 0.1),
@@ -46,13 +41,12 @@ class SettingsState(BaseState):
         self.duration_buttons = self._build_option_buttons(center_x, 240, self.duration_options)
         self.size_buttons = self._build_option_buttons(center_x, 320, self.size_options)
         self.difficulty_buttons = self._build_option_buttons(center_x, 400, self.difficulty_options)
-        self.color_buttons = self._build_option_buttons(center_x, 480, self.color_options)
-        self.delay_buttons = self._build_option_buttons(center_x, 560, self.delay_options)
-        self._init_volume_slider(center_x, 620)
+        self.delay_buttons = self._build_option_buttons(center_x, 480, self.delay_options)
+        self._init_volume_slider(center_x, 560)
 
         self.back_button = Button(
             image=None,
-            pos=(center_x, 670),
+            pos=(center_x, 650),
             font=self.font_section,
             base_color=(129, 2, 31),
             hovering_color=(252, 154, 154),
@@ -151,11 +145,6 @@ class SettingsState(BaseState):
                 self.game.settings["ttl_multiplier"] = self.difficulty_options[i][1]
                 return
 
-        for i, button in enumerate(self.color_buttons):
-            if button.checkForInput(mouse_pos):
-                self.game.settings["target_color"] = self.color_options[i][1]
-                return
-
         for i, button in enumerate(self.delay_buttons):
             if button.checkForInput(mouse_pos):
                 self.game.settings["spawn_delay"] = self.delay_options[i][1]
@@ -192,9 +181,6 @@ class SettingsState(BaseState):
             self.difficulty_buttons, self.difficulty_options, self.game.settings["ttl_multiplier"]
         )
         self._set_group_button_style(
-            self.color_buttons, self.color_options, self.game.settings["target_color"]
-        )
-        self._set_group_button_style(
             self.delay_buttons, self.delay_options, self.game.settings["spawn_delay"]
         )
         if not self.dragging_volume:
@@ -207,8 +193,6 @@ class SettingsState(BaseState):
         for button in self.size_buttons:
             button.changeColor(mouse_pos)
         for button in self.difficulty_buttons:
-            button.changeColor(mouse_pos)
-        for button in self.color_buttons:
             button.changeColor(mouse_pos)
         for button in self.delay_buttons:
             button.changeColor(mouse_pos)
@@ -226,7 +210,6 @@ class SettingsState(BaseState):
         duration_text = self.font_section.render("Game Duration", True, (20, 71, 88))
         size_text = self.font_section.render("Target Size", True, (20, 71, 88))
         difficulty_text = self.font_section.render("Difficulty", True, (20, 71, 88))
-        color_text = self.font_section.render("Target Color", True, (20, 71, 88))
         delay_text = self.font_section.render("Delay", True, (20, 71, 88))
         volume_text = self.font_section.render("Volume", True, (20, 71, 88))
 
@@ -234,9 +217,8 @@ class SettingsState(BaseState):
         screen.blit(duration_text, duration_text.get_rect(center=(center_x, 200)))
         screen.blit(size_text, size_text.get_rect(center=(center_x, 280)))
         screen.blit(difficulty_text, difficulty_text.get_rect(center=(center_x, 360)))
-        screen.blit(color_text, color_text.get_rect(center=(center_x, 440)))
-        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 520)))
-        screen.blit(volume_text, volume_text.get_rect(center=(center_x, 600)))
+        screen.blit(delay_text, delay_text.get_rect(center=(center_x, 440)))
+        screen.blit(volume_text, volume_text.get_rect(center=(center_x, 520)))
 
         pygame.draw.rect(screen, (180, 180, 180), self.slider_rect, border_radius=6)
         fill_rect = self.slider_rect.copy()
@@ -256,7 +238,7 @@ class SettingsState(BaseState):
         )
         volume_percent = int(self.game.settings["master_volume"] * 100)
         volume_value = self.font_option.render(f"{volume_percent}%", True, (129, 2, 31))
-        screen.blit(volume_value, volume_value.get_rect(center=(center_x, 640)))
+        screen.blit(volume_value, volume_value.get_rect(center=(center_x, 600)))
 
         for button in self.progression_buttons:
             button.update(screen)
@@ -265,8 +247,6 @@ class SettingsState(BaseState):
         for button in self.size_buttons:
             button.update(screen)
         for button in self.difficulty_buttons:
-            button.update(screen)
-        for button in self.color_buttons:
             button.update(screen)
         for button in self.delay_buttons:
             button.update(screen)

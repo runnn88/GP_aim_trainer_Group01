@@ -32,8 +32,7 @@ class PlayingState(BaseState):
         # Target
         self.base_radius = int(30 * self.game.settings["size_multiplier"])
         self.base_ttl = 1.5 * self.game.settings["ttl_multiplier"]
-        target_color = self.game.settings["target_color"]
-        self.target = Target(self.game, radius=self.base_radius, ttl=self.base_ttl, color=target_color)
+        self.target = Target(self.game, radius=self.base_radius, ttl=self.base_ttl)
         self._apply_progression_to_target()
         self.spawn_time = pygame.time.get_ticks() / 1000.0
         self.hud = HUD(self.game)
@@ -173,7 +172,8 @@ class PlayingState(BaseState):
             return
 
         elapsed_time = self.duration - self.time_left
-        stage = max(0, int(elapsed_time // 10))
+        quarter_duration = max(0.001, self.duration / 4.0)
+        stage = min(3, max(0, int(elapsed_time // quarter_duration)))
 
         size_scale = max(0.4, 1.0 - 0.1 * stage)
         ttl_scale = max(0.2, 1.0 - 0.2 * stage)

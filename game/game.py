@@ -38,7 +38,6 @@ class Game:
             "spawn_delay": 0.0,
             "progression_enabled": False,
             "master_volume": 0.35,
-            "target_color": (129, 2, 31),
         }
         self.music_tracks = {
             "menu": Path("assets/music/menu_music.mp3"),
