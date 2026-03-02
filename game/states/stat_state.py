@@ -37,7 +37,7 @@ class StatState(BaseState):
         screen.fill((245, 238, 205)) 
         center_x = self.game.width // 2
         
-        title_text = self.font_title.render("TOP 5 RECORDS", True, (129, 2, 31))
+        title_text = self.font_title.render("TOP 3 RECORDS", True, (129, 2, 31))
         screen.blit(title_text, title_text.get_rect(center=(center_x, 100)))
         
         headers = ["RANK", "DATE", "SCORE", "ACCURACY", "REACTION"]
