@@ -49,6 +49,7 @@ Players click fruit targets as quickly as possible before they time out. The gam
 ## Controls
 
 ### Start Menu
+
 - `Left Click`:
   - `Start` -> start game
   - `Settings` -> open settings
@@ -57,21 +58,25 @@ Players click fruit targets as quickly as possible before they time out. The gam
   - `Exit` -> close game
 
 ### Playing
+
 - `Left Click` target -> hit target
 - `Left Click` outside target -> miss-click penalty
 - `ESC` or click pause (`||`) -> pause
 
 ### Pause
+
 - `ENTER` or `ESC` -> resume
 - `Left Click`:
   - `Continue` -> resume
   - `Main menu` -> return to menu
 
 ### Results
+
 - `ENTER` -> return to main menu
 - `ESC` -> quit
 
 ### Settings
+
 - `Left Click` options to change values
 - Volume uses a drag slider (or click the bar)
 - `ESC` or `Back` -> return to main menu
@@ -89,21 +94,25 @@ Players click fruit targets as quickly as possible before they time out. The gam
 ## Scoring Details
 
 Per hit:
+
 - base score = `100`
 - reaction bonus up to `50` (faster click -> higher bonus)
 - combo multiplier scales with streak and is capped
 
 Miss behavior:
+
 - miss-click: miss count + score penalty
 - timeout miss: miss count + score penalty
 
 ## Persistence and History
 
 Game results are stored in local SQLite database:
+
 - file: `aim_trainer.db`
 - table: `GAME_STATS`
 
 Stored fields include:
+
 - play date
 - score
 - accuracy
@@ -132,33 +141,47 @@ python main.py
 
 ## Project Structure
 
-```text
-GP_aim_trainer_Group01/
-  main.py
-  config.py
-  requirements.txt
-  pop.ogg
-  aim_trainer.db
-  assets/music/
-  game/
-    game.py
-    database.py
-    state_machine.py
-    target.py
-    aim_trainer.sql
-    states/
-  ui/
-    button.py
-    hud.py
-    effects.py
-```
+GP_AIM_TRAINER_GROUP01/
+├── **pycache**/
+├── .venv/
+├── assets/
+│ └── music
+│ ├── gameplay_music.mp3
+│ └── menu_music.mp3
+├── game/
+│ ├── **pycache**/
+│ ├── states/
+│ │ ├── **pycache**/
+│ │ ├── **init**.py
+│ │ ├── base_state.py
+│ │ ├── instruction_state.py
+│ │ ├── pause_state.py
+│ │ ├── playing_state.py
+│ │ ├── result_state.py
+│ │ ├── settings_state.py
+│ │ ├── stat_state.py
+│ │ └── start_state.py
+│ ├── aim_trainer.sql
+│ ├── database.py
+│ ├── game.py
+│ ├── state_machine.py
+│ └── target.py
+├── ui/
+│ ├── button.py
+│ ├── effects.py
+│ └── hud.py
+├── utils/
+├── .gitignore
+├── aim_trainer.db
+├── config.py
+├── LuckiestGuy-Regular.ttf
+├── main.py
+├── pop.ogg
+├── README.md
+└── requirements.txt
 
 ## Asset Credits
 
 - Hit sound: `pop.ogg` (project asset)
 - Background music: Pixabay (menu + gameplay tracks)
 - Font: `LuckiestGuy-Regular.ttf`
-
----
-
-
