@@ -36,6 +36,7 @@ class PauseState(BaseState):
                     
                 if self.menu_button.checkForInput(mouse_pos):
                     from game.states import StartState
+                    self.game.state_machine.clear()
                     self.game.state_machine.change(StartState(self.game))
                 
     def update(self, dt):

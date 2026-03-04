@@ -20,7 +20,11 @@ class StateMachine:
         if len(self.states) > 0:
             self.states[-1].exit()
             self.states.pop()
-        
+    
+    def clear(self):
+        while len(self.states) > 0:
+            self.states.pop()
+            
     def handle_event(self, event):
         if len(self.states) > 0:
             self.states[-1].handle_event(event)
