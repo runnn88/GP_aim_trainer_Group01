@@ -18,12 +18,12 @@ class SettingsState(BaseState):
             ("90s", 90),
         ]
         self.size_options = [
-            ("Default", 1.0),
+            ("Medium", 1.0),
             ("Easy", 1.2),
             ("Hard", 0.5),
         ]
         self.difficulty_options = [
-            ("Default", 1.0),
+            ("Medium", 1.0),
             ("Easy", 2.0),
             ("Hard", 0.5),
         ]

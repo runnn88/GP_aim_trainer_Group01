@@ -172,14 +172,14 @@ class PlayingState(BaseState):
             return
 
         elapsed_time = self.duration - self.time_left
-        quarter_duration = max(0.001, self.duration / 4.0)
+        quarter_duration = self.duration / 4.0
         stage = min(3, max(0, int(elapsed_time // quarter_duration)))
 
-        size_scale = max(0.4, 1.0 - 0.1 * stage)
-        ttl_scale = max(0.2, 1.0 - 0.2 * stage)
+        size_scale = 1.0 - 0.1 * stage
+        ttl_scale = 1.0 - 0.2 * stage
 
         self.target.radius = max(8, int(self.base_radius * size_scale))
-        self.target.ttl = max(0.2, self.base_ttl * ttl_scale)
+        self.target.ttl = max(0.5, self.base_ttl * ttl_scale)
 
     # ------------------------------------------
     def draw(self, screen):
